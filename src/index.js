@@ -31,8 +31,12 @@ const xhr = `http://api.giphy.com/v1/gifs/search?q=${search}&api_key=${process.e
 
 // UI Logic
 
-function printElements(apiResponse, search) {
-  document.querySelector('#showResponse').innerText = `The pics in ${search} is ${apiResponse.data[2].url}.`;
+function printElements(apiResponse) {
+  // document.querySelector('#showResponse').innerText = `The ${apiResponse.data[1].embed_url}pics in ${apiResponse.data[2].images.looping.mp4} is ${apiResponse.data[2].url}`;
+
+  let imgElement = document.createElement('img')
+  imgElement.src = apiResponse.data[0].images.original.url;
+  document.querySelector('body').append(imgElement);
 }
 // ${apiResponse.data[2].images.original.url}
 
