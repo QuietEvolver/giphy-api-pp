@@ -1,6 +1,7 @@
 import 'bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import './css/styles.css';
+import './assets/css/styles.css';
+// import Planet from './js/JSFILE.js';
 
 // Business Logic
 
