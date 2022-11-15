@@ -1,33 +1,40 @@
-import 'bootstrap';
-import 'bootstrap/dist/css/bootstrap.min.css';
+// import 'bootstrap';
+// import 'bootstrap/dist/css/bootstrap.min.css';
 import './assets/css/styles.css';
 // import Planet from './js/JSFILE.js';
 
 // Business Logic
 
-function getWeather(city) {
+function getGiphy(search) {
   let request = new XMLHttpRequest();
-  const url = `http://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${process.env.API_KEY}`;
+  // const urlGiphy = `http://api.giphy.com/v1/gifs/search?q=${search}&api_key=${process.env.API_KEY}&limit=5`;
+
+  //javascript, jQuery
+
+const xhr = `http://api.giphy.com/v1/gifs/search?q=${search}&api_key=${process.env.API_KEY}&limit=5`;
+// xhr.done(function(data) { console.log("success got data", data); })
+            
 
   request.addEventListener("loadend", function() {
     const response = JSON.parse(this.responseText);
     if (this.status === 200) {
-      printElements(response, city);
+      printElements(response, search);
+      console.log("success got data", response); 
     } else {
-      printError(this, response, city);
+      printError(this, response, search);
     }
   });
 
-  request.open("GET", url, true);
+  request.open("GET", xhr, true); //urlGiphy
   request.send();
 }
 
 // UI Logic
 
-function printElements(apiResponse, city) {
-  document.querySelector('#showResponse').innerText = `The humidity in ${city} is ${apiResponse.main.humidity}%. 
-  The temperature in Kelvins is ${apiResponse.main.temp} degrees.`;
+function printElements(apiResponse, search) {
+  document.querySelector('#showResponse').innerText = `The pics in ${search} is ${apiResponse.data[2].url}.`;
 }
+// ${apiResponse.data[2].images.original.url}
 
 function printError(request, apiResponse, city) {
   document.querySelector('#showResponse').innerText = `There was an error accessing the weather data for ${city}: ${request.status} ${request.statusText}: ${apiResponse.message}`;
@@ -35,9 +42,9 @@ function printError(request, apiResponse, city) {
 
 function handleFormSubmission(event) {
   event.preventDefault();
-  const city = document.querySelector('#location').value;
+  const search = document.querySelector('#location').value;
   document.querySelector('#location').value = null;
-  getWeather(city);
+  getGiphy(search);
 }
 
 window.addEventListener("load", function() {
