@@ -43,6 +43,25 @@ const url = `http://api.giphy.com/v1/gifs/trending?&api_key=${process.env.API_KE
   request.send();
 }
 
+function getRandom(){
+  let request = new XMLHttpRequest();
+
+  const url = `https://api.giphy.com/v1/gifs/random?api_key=${process.env.API_KEY}&tag=&rating=g`;
+
+  request.addEventListener("loadend", function(){
+    const response = JSON.parse(this.responseText);
+    if (this.status === 200) {
+      printRandom(response);
+      console.log("random OK: ", response);
+    } else {
+      printError(this, response);
+    }
+  });
+
+  request.open("GET", url, true);
+  request.send();
+}
+
 // UI Logic
 
 function printElements(apiResponse) {
@@ -58,6 +77,12 @@ function printTrending(apiResponse) {
   document.querySelector('body').append(imgElement);
 }
 
+function printRandom(apiResponse){
+  let imgElement = document.createElement('img');
+  imgElement.src = apiResponse.data.images.original.url;
+  document.querySelector('body').append(imgElement);
+}
+
 function printError(request, apiResponse) {
   document.querySelector('#showResponse').innerText = `There was an error accessing the trending gifs ${request.status} ${request.statusText}: ${apiResponse.message}`;
 }
@@ -69,11 +94,14 @@ function handleFormSubmission(event) {
   getGiphy(search);
 }
 function handleTrendingClick(){
-  // e.preventDefault();
-  // const trending = document.getElementById('a href =`https://api.giphy.com/v1/gifs/trending?api_key=jjPQb6Tt61D8XYDEzY0Au0gUoIx4r7z4&limit=25&rating=g`') 
   getTrending();
+}
+
+function handleRandomClick(){
+  getRandom();
 }
 window.addEventListener("load", function() {
   document.querySelector('form').addEventListener("submit", handleFormSubmission);
   document.querySelector("button#trending-button").addEventListener("click", handleTrendingClick);
+  document.querySelector("button#random-button").addEventListener("click", handleRandomClick);
 });
